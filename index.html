@@ -1,109 +1,390 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XADIANT</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- Navigation Bar -->
-    <nav>
-        <div class="logo">
-            <a href="#">XADIANT</a>
-        </div>
-        <ul class="nav-links">
-            <li class="dropdown">
-                <a href="#games">Games</a>
-                <ul class="dropdown-menu">
-                    <li><a href="#game1">Game 1</a></li>
-                    <li><a href="#game2">Game 2</a></li>
-                    <li><a href="#game3">Game 3</a></li>
-                </ul>
-            </li>
-            <li><a href="#about">About</a></li>
-            <li class="dropdown">
-                <a href="#developer">Developer</a>
-                <ul class="dropdown-menu">
-                    <li><a href="#team">Our Team</a></li>
-                    <li><a href="#careers">Careers</a></li>
-                </ul>
-            </li>
-            <li><a href="#news">News</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter (Clean, Standard) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            // Darker, Deeper Mouse Grey Palette
+                            dark: '#1a1d24',   // Main BG: Deep Charcoal
+                            darker: '#0f1115', // Nav/Footer: Almost Black
+                            surface: '#242830',// Cards: Slightly lighter charcoal
+                            text: '#e2e8f0',   // Off-white text
+                            muted: '#94a3b8',  // Muted text
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        // Adjusted shadows for darker background intensity
+                        '3d': '0 12px 24px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08)',
+                        '3d-hover': '0 20px 40px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.15)',
+                        'inner-depth': 'inset 2px 2px 6px rgba(0,0,0,0.4), inset -1px -1px 4px rgba(255,255,255,0.05)',
+                        'glow': '0 0 20px rgba(255, 255, 255, 0.15)',
+                    },
+                    animation: {
+                        'shimmer': 'shimmer 2.5s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        shimmer: {
+                            '0%': { backgroundPosition: '-200% 0' },
+                            '100%': { backgroundPosition: '200% 0' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #1a1d24; /* Updated Main BG */
+            color: #e2e8f0;
+        }
 
+        /* Glassmorphism for Nav */
+        .nav-glass {
+            background: rgba(15, 17, 21, 0.85); /* Darker glass */
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        /* Shine Effect Utility */
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                rgba(255, 255, 255, 0.08) 50%,
+                transparent 100%
+            );
+            transform: skewX(-25deg);
+            transition: 0.5s;
+        }
+        .shine-effect:hover::after {
+            left: 200%;
+            transition: 0.7s ease-in-out;
+        }
+
+        /* 3D Text Effect */
+        .text-3d {
+            text-shadow: 0 4px 8px rgba(0,0,0,0.6);
+        }
+
+        /* Placeholder Box Pattern */
+        .placeholder-3d {
+            background: linear-gradient(135deg, #2c313c 0%, #1a1d24 100%);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Subtle grid line */
+        .placeholder-3d::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: radial-gradient(#4a5060 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.15;
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-brand-dark">
+
+    <!-- Navigation Bar -->
+    <nav class="fixed w-full z-50 nav-glass transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo Section -->
+                <div class="flex-shrink-0 flex items-center gap-3 group cursor-pointer">
+                    <!-- Just the icon, no box -->
+                    <div class="relative w-10 h-10 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                         <img src="assets/icon.png" alt="XADIANT Logo" class="h-8 w-8 object-contain filter drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]">
+                    </div>
+                    <a href="#" class="text-2xl font-black tracking-wide text-gray-200 group-hover:text-white transition-all text-3d">
+                        XADIANT
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <ul class="flex items-center space-x-8 font-semibold text-sm text-brand-muted tracking-wide">
+                        <li class="relative group">
+                            <a href="#games" class="hover:text-white transition-colors py-2 flex items-center gap-1">
+                                Games <i class="fas fa-chevron-down text-[10px] opacity-50 group-hover:opacity-100 ml-1 transition-all"></i>
+                            </a>
+                            <ul class="absolute left-0 mt-4 w-48 bg-brand-surface border border-white/5 rounded-xl shadow-3d opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:mt-2 transition-all duration-200 transform origin-top-left z-50 overflow-hidden">
+                                <li><a href="#game1" class="block px-4 py-3 text-gray-400 hover:bg-brand-dark hover:text-white transition-colors">Game 1</a></li>
+                                <li><a href="#game2" class="block px-4 py-3 text-gray-400 hover:bg-brand-dark hover:text-white transition-colors">Game 2</a></li>
+                                <li><a href="#game3" class="block px-4 py-3 text-gray-400 hover:bg-brand-dark hover:text-white transition-colors">Game 3</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="#about" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="#news" class="hover:text-white transition-colors">News</a></li>
+                        <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-brand-muted hover:text-white p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-darker border-t border-white/5">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#games" class="block px-4 py-3 rounded-lg text-brand-muted hover:bg-white/5 hover:text-white">Games</a>
+                <a href="#about" class="block px-4 py-3 rounded-lg text-brand-muted hover:bg-white/5 hover:text-white">About</a>
+                <a href="#news" class="block px-4 py-3 rounded-lg text-brand-muted hover:bg-white/5 hover:text-white">News</a>
+                <a href="#contact" class="block px-4 py-3 rounded-lg text-brand-muted hover:bg-white/5 hover:text-white">Contact</a>
+            </div>
+        </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="hero-section">
-        <div class="hero-content">
-            <h1>The better rADIANT eXperience, XADIANT! >.< </h1>
-            <p>Immersive worlds and thrilling adventures await you!</p>
-            <a href="#games" class="cta-button">Explore</a>
+    <header class="relative min-h-screen flex items-center justify-center text-center px-4 pt-16">
+        <!-- Deep Background Gradient -->
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-darker via-brand-dark to-brand-darker"></div>
+        <!-- Subtle Spotlight Effect -->
+        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_30%,_rgba(255,255,255,0.08),_transparent_50%)]"></div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <div class="mb-12 flex justify-center animate-float">
+                <!-- Icon without box, just floating with glow -->
+                <div class="relative group">
+                    <!-- Glow behind icon -->
+                    <div class="absolute inset-0 bg-white/10 blur-3xl rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                    <img src="assets/icon.png" alt="Logo" class="relative w-28 h-28 md:w-40 md:h-40 object-contain drop-shadow-2xl filter brightness-110 hover:scale-105 transition-transform duration-500">
+                </div>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-black mb-8 text-white tracking-tight leading-none text-3d">
+                XADIANT
+            </h1>
+            <p class="text-lg md:text-2xl text-brand-muted mb-12 font-medium max-w-2xl mx-auto leading-relaxed">
+                Immersive worlds and thrilling adventures await you.<br>
+                <span class="text-gray-400 opacity-70 text-base mt-2 block font-normal">The Better Radiant Experience.</span>
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <!-- 3D Button with Shine -->
+                <a href="#games" class="shine-effect group relative px-10 py-4 bg-gradient-to-b from-[#3a4150] to-[#242936] text-gray-100 font-bold text-lg rounded-xl shadow-3d hover:shadow-3d-hover hover:-translate-y-1 hover:text-white transition-all duration-300 border-t border-white/10 border-b border-black/20">
+                    Explore Games
+                </a>
+            </div>
         </div>
     </header>
 
     <!-- Games Section -->
-    <section id="games" class="games-section">
-        <h2>Our Games</h2>
-        <div class="games-gallery">
-            <div class="game-card">
-                <img src="game1.jpg" alt="Game 1">
-                <h3>Game Title 1</h3>
-                <p>A thrilling adventure set in a fantasy world.</p>
+    <section id="games" class="py-24 px-4 bg-[#15181e] relative shadow-inner">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col items-center mb-20">
+                <h2 class="text-4xl font-black text-white mb-2 text-3d tracking-tight">Our Games</h2>
+                <div class="w-16 h-1 bg-[#3b4254] rounded-full opacity-50"></div>
             </div>
-            <div class="game-card">
-                <img src="game2.jpg" alt="Game 2">
-                <h3>Game Title 2</h3>
-                <p>An epic journey filled with action and mystery.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Game Card 1 -->
+                <div class="group bg-brand-surface rounded-2xl overflow-hidden shadow-3d hover:shadow-3d-hover hover:-translate-y-2 transition-all duration-300 border border-white/5">
+                    <!-- Placeholder for Image -->
+                    <div class="h-60 w-full placeholder-3d group-hover:brightness-110 transition-all">
+                        <i class="fas fa-cube text-5xl text-white/10 group-hover:text-white/30 transition-colors transform group-hover:scale-110 duration-500 drop-shadow-md"></i>
+                    </div>
+                    <div class="p-8 bg-gradient-to-b from-brand-surface to-[#1e2229]">
+                        <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-gray-200 transition-all">Game 1</h3>
+                        <p class="text-brand-muted mb-6 text-sm leading-relaxed">Description 1 goes here. A brief overview of the game mechanics and story.</p>
+                        <div class="inline-block px-4 py-2 bg-[#1a1d24] rounded-lg text-xs font-bold text-gray-400 border border-white/5 shadow-inner-depth">
+                            Genre A
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 2 -->
+                <div class="group bg-brand-surface rounded-2xl overflow-hidden shadow-3d hover:shadow-3d-hover hover:-translate-y-2 transition-all duration-300 border border-white/5">
+                    <div class="h-60 w-full placeholder-3d group-hover:brightness-110 transition-all">
+                        <i class="fas fa-shapes text-5xl text-white/10 group-hover:text-white/30 transition-colors transform group-hover:scale-110 duration-500 drop-shadow-md"></i>
+                    </div>
+                    <div class="p-8 bg-gradient-to-b from-brand-surface to-[#1e2229]">
+                        <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-gray-200 transition-all">Game 2</h3>
+                        <p class="text-brand-muted mb-6 text-sm leading-relaxed">Description 2 goes here. A brief overview of the game mechanics and story.</p>
+                         <div class="inline-block px-4 py-2 bg-[#1a1d24] rounded-lg text-xs font-bold text-gray-400 border border-white/5 shadow-inner-depth">
+                            Genre B
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Card 3 -->
+                 <div class="group bg-brand-surface rounded-2xl overflow-hidden shadow-3d hover:shadow-3d-hover hover:-translate-y-2 transition-all duration-300 border border-white/5">
+                    <div class="h-60 w-full placeholder-3d group-hover:brightness-110 transition-all">
+                         <i class="fas fa-layer-group text-5xl text-white/10 group-hover:text-white/30 transition-colors transform group-hover:scale-110 duration-500 drop-shadow-md"></i>
+                    </div>
+                    <div class="p-8 bg-gradient-to-b from-brand-surface to-[#1e2229]">
+                        <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-gray-200 transition-all">Game 3</h3>
+                        <p class="text-brand-muted mb-6 text-sm leading-relaxed">Description 3 goes here. A brief overview of the game mechanics and story.</p>
+                         <div class="inline-block px-4 py-2 bg-[#1a1d24] rounded-lg text-xs font-bold text-gray-400 border border-white/5 shadow-inner-depth">
+                            Genre C
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- More game cards as needed -->
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="about-section">
-        <h2>About Us</h2>
-        <p>XADIANT is dedicated to bringing unique gaming experiences to players worldwide. Our passion for storytelling, immersive design, and cutting-edge technology drives us to create games that captivate audiences.</p>
-    </section>
-
-    <!-- Developer Section -->
-    <section id="developer" class="developer-section">
-        <h2>Meet the Developer Team</h2>
-        <p>Our talented team of developers, designers, and artists are committed to pushing the boundaries of what's possible in gaming.</p>
+    <section id="about" class="py-24 bg-brand-dark px-4 relative z-10">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-16">
+            <div class="w-full md:w-1/2">
+                <div class="w-full aspect-square placeholder-3d rounded-3xl shadow-3d border border-white/5 relative overflow-hidden group">
+                    <!-- Decorative Circle inside -->
+                    <div class="absolute w-32 h-32 border-2 border-white/5 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:scale-150 transition-transform duration-1000 ease-out"></div>
+                    <span class="text-white/20 font-bold text-xl tracking-widest relative z-10">TEAM / VISUAL</span>
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 text-left">
+                <h2 class="text-3xl md:text-4xl font-black text-white mb-6 tracking-tight text-3d">About Us</h2>
+                <p class="text-lg text-brand-muted mb-10 leading-relaxed font-medium">
+                    XADIANT is dedicated to bringing unique gaming experiences to players worldwide. 
+                    Our passion for <strong class="text-gray-200">storytelling</strong> and <strong class="text-gray-200">immersive design</strong> drives us.
+                </p>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-brand-surface p-6 rounded-2xl border border-white/5 shadow-inner-depth text-center hover:bg-[#2a2f3a] transition-colors">
+                        <h4 class="text-3xl font-black text-white mb-1">5+</h4>
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">Projects</p>
+                    </div>
+                    <div class="bg-brand-surface p-6 rounded-2xl border border-white/5 shadow-inner-depth text-center hover:bg-[#2a2f3a] transition-colors">
+                        <h4 class="text-3xl font-black text-white mb-1">Global</h4>
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">Reach</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- News Section -->
-    <section id="news" class="news-section">
-        <h2>Latest News</h2>
-        <div class="news-article">
-            <h3>XADIANT Announces New Project!</h3>
-            <p>We are thrilled to announce our latest project, coming soon to a platform near you.</p>
+    <section id="news" class="py-24 bg-brand-darker px-4 border-t border-white/5 shadow-inner">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex justify-between items-end mb-12">
+                <h2 class="text-3xl font-black text-white text-3d">Latest News</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- News Item -->
+                <div class="bg-brand-surface p-8 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-3d border border-white/5 hover:bg-[#2a2f3a] hover:-translate-y-1 transition-all cursor-pointer group">
+                    <div>
+                        <span class="inline-block px-3 py-1 bg-[#1a1d24] text-gray-400 text-[10px] font-bold rounded mb-3 border border-white/5 tracking-wider shadow-sm">ANNOUNCEMENT</span>
+                        <h3 class="text-xl font-bold text-gray-200 mb-2 group-hover:text-white transition-colors">XADIANT Announces New Project!</h3>
+                        <p class="text-brand-muted text-sm">We are thrilled to announce our latest project.</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-[#1a1d24] shadow-inner-depth flex items-center justify-center text-gray-500 group-hover:text-white transition-colors border border-white/5">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+                 <!-- News Item -->
+                 <div class="bg-brand-surface p-8 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-3d border border-white/5 hover:bg-[#2a2f3a] hover:-translate-y-1 transition-all cursor-pointer group">
+                    <div>
+                         <span class="inline-block px-3 py-1 bg-[#1a1d24] text-gray-400 text-[10px] font-bold rounded mb-3 border border-white/5 tracking-wider shadow-sm">UPDATE</span>
+                        <h3 class="text-xl font-bold text-gray-200 mb-2 group-hover:text-white transition-colors">Website Renewal</h3>
+                        <p class="text-brand-muted text-sm">Our homepage has been updated with a new look.</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-[#1a1d24] shadow-inner-depth flex items-center justify-center text-gray-500 group-hover:text-white transition-colors border border-white/5">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- More news articles as needed -->
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact-section">
-        <h2>Contact Us</h2>
-        <p>Got questions or just want to say hi? Reach out to us!</p>
-        <form action="#" method="post">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Your Email" required>
-            <textarea name="message" placeholder="Your Message" required></textarea>
-            <button type="submit">Send Message</button>
-        </form>
+    <section id="contact" class="py-24 bg-brand-dark relative">
+        <div class="max-w-3xl mx-auto px-4 text-center">
+            <h2 class="text-4xl font-black text-white mb-4 text-3d">Contact Us</h2>
+            <p class="text-brand-muted mb-12">Got questions? Reach out to us!</p>
+
+            <form action="#" method="post" class="space-y-5 text-left bg-brand-surface p-8 md:p-10 rounded-3xl shadow-3d border border-white/5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold mb-2 text-gray-500 uppercase tracking-widest pl-1">Name</label>
+                        <input type="text" class="w-full px-4 py-4 bg-[#1a1d24] border border-transparent focus:border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:shadow-glow transition-all shadow-inner-depth text-sm" placeholder="Your Name">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-2 text-gray-500 uppercase tracking-widest pl-1">Email</label>
+                        <input type="email" class="w-full px-4 py-4 bg-[#1a1d24] border border-transparent focus:border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:shadow-glow transition-all shadow-inner-depth text-sm" placeholder="Your Email">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold mb-2 text-gray-500 uppercase tracking-widest pl-1">Message</label>
+                    <textarea rows="4" class="w-full px-4 py-4 bg-[#1a1d24] border border-transparent focus:border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:shadow-glow transition-all shadow-inner-depth text-sm" placeholder="Write your message..."></textarea>
+                </div>
+                <button type="submit" class="shine-effect w-full py-4 mt-2 bg-gradient-to-b from-[#3a4150] to-[#242936] text-white font-bold rounded-xl shadow-3d hover:shadow-3d-hover hover:-translate-y-1 transition-all border-t border-white/10 border-b border-black/30 tracking-wide">
+                    Send Message
+                </button>
+            </form>
+        </div>
     </section>
 
     <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 XADIANT. All rights reserved.</p>
-        <div class="social-media">
-            <a href="#"><img src="facebook-icon.png" alt="Facebook"></a>
-            <a href="#"><img src="twitter-icon.png" alt="Twitter"></a>
-            <a href="#"><img src="instagram-icon.png" alt="Instagram"></a>
+    <footer class="bg-brand-darker text-white py-16 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity cursor-pointer">
+                <img src="assets/icon.png" alt="Logo" class="h-6 w-6 object-contain filter grayscale brightness-150">
+                <span class="text-lg font-bold tracking-widest">XADIANT</span>
+            </div>
+            <div class="text-xs text-gray-600 tracking-wide">
+                &copy; 2025 XADIANT. All rights reserved.
+            </div>
+            <div class="flex gap-8 text-gray-500">
+                <a href="#" class="hover:text-white hover:scale-110 transition-all"><i class="fab fa-twitter text-xl"></i></a>
+                <a href="#" class="hover:text-white hover:scale-110 transition-all"><i class="fab fa-instagram text-xl"></i></a>
+                <a href="#" class="hover:text-white hover:scale-110 transition-all"><i class="fab fa-facebook text-xl"></i></a>
+            </div>
         </div>
     </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>
